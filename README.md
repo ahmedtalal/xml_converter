@@ -13,5 +13,4 @@ To use the XML Converter in your Dart project, add the following dependency to y
 
 ```yaml
 dependencies:
-  xml_converter:
-    path: ./path_to_xml_converter  # Adjust the path to where your xml_converter.dart file is located
+  xml_converter:^1.0.0
