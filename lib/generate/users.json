@@ -1,0 +1,16 @@
+{
+  "weatherInfo": {
+    "weather": "sunny",
+    "clouds": "no",
+    "time": "11.30",
+    "sportsYouCanDo": {
+      "sport1": "running",
+      "sport2": "hiking",
+      "sport3": "biking"
+    },
+    "anyMap": {
+      "key1": "value 1",
+      "key2": "value 2"
+    }
+  }
+}

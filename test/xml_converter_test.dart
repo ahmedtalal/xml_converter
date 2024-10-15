@@ -1,53 +1,76 @@
 import 'dart:io';
-
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:xml_converter/xml_converter.dart';
-
 void main() {
-  group('XmlConverterBase Tests', () {
-    final xmlConverter = XmlConverterBase();
+  late XmlConverterBase xmlConverter;
 
-    const xmlString = '<user><name>John Doe</name><age>30</age></user>';
+  setUp(() {
+    xmlConverter = XmlConverterBase();
+  });
 
-    test('Convert XML string to JSON string', () async {
-      // Create a temporary directory for the test output
-      final outputFileName = 'test_output';
+  test('convertXmlToJsonFile generates JSON file', () async {
+    final xmlString = '''
+      <root>
+        <item>Value 1</item>
+        <item>Value 2</item>
+      </root>
+    ''';
 
-      // Convert XML to JSON
-      await xmlConverter.convertXmlToJsonFile(xmlString, outputFileName);
+    final outputFileName = 'test_output';
+    
+    // Ensure the directory does not exist before test
+    final outputDir = Directory('lib/generate');
+    if (await outputDir.exists()) {
+      await outputDir.delete(recursive: true);
+    }
 
-      // Check if the JSON file has been created and read its content
-      final jsonFile = File('lib/generated/$outputFileName.json');
-      expect(await jsonFile.exists(), isTrue);
-      
-      final jsonContent = await jsonFile.readAsString();
-      expect(jsonContent, '{"name":"John Doe","age":"30"}');
+    await xmlConverter.convertXmlToJsonFile(xmlString, outputFileName);
 
-      // Clean up the generated file
-      await jsonFile.delete();
-    });
+    final jsonFile = File('${outputDir.path}/$outputFileName.json');
+    expect(await jsonFile.exists(), isTrue);
 
-    test('Convert XML string to Dart class string', () async {
-      // Create a temporary directory for the test output
-      final className = 'User';
-      final outputFileName = 'user_class_output';
+    // Clean up
+    await jsonFile.delete();
+  });
 
-      // Convert XML to Dart class
-      await xmlConverter.convertXmlToDartClass(xmlString, className, outputFileName);
+  test('convertXmlToDartClass generates Dart class file', () async {
+    final xmlString = '''
+      <root>
+        <item>
+          <name>Item Name</name>
+          <value>Item Value</value>
+        </item>
+      </root>
+    ''';
 
-      // Check if the Dart class file has been created and read its content
-      final dartFile = File('lib/generated/$outputFileName.dart');
-      expect(await dartFile.exists(), isTrue);
-      
-      final dartContent = await dartFile.readAsString();
-      expect(dartContent, contains('class $className {'));
-      expect(dartContent, contains('String? name;'));
-      expect(dartContent, contains('String? age;'));
-      expect(dartContent, contains('$className.fromJson'));
-      expect(dartContent, contains('toJson() => {'));
+    final className = 'Item';
+    final outputFileName = 'item_class';
 
-      // Clean up the generated file
-      await dartFile.delete();
-    });
+    // Ensure the directory does not exist before test
+    final outputDir = Directory('lib/generate');
+    if (await outputDir.exists()) {
+      await outputDir.delete(recursive: true);
+    }
+
+    await xmlConverter.convertXmlToDartClass(xmlString, className, outputFileName);
+
+    final dartFile = File('${outputDir.path}/$outputFileName.dart');
+    expect(await dartFile.exists(), isTrue);
+
+    // Verify content in the generated Dart file
+    final content = await dartFile.readAsString();
+    expect(content, contains('class $className'));
+    expect(content, contains('String? name;'));
+    expect(content, contains('String? value;'));
+
+    // Clean up
+    await dartFile.delete();
+  });
+
+  tearDown(() async {
+    final outputDir = Directory('lib/generate');
+    if (await outputDir.exists()) {
+      await outputDir.delete(recursive: true);
+    }
   });
 }

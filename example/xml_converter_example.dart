@@ -1,50 +1,29 @@
-import 'package:xml_converter/xml_converter.dart';
+import 'package:xml_converter/src/xml_converter_base.dart';
 
 void main() async {
-  final xmlString = '''
-  <user>
-    <name>ahmed talal</name>
-    <age>26</age>
-  </user>
-  ''';
+  final xmlConverter = XmlConverterBase();
 
-  final converter = XmlConverterBase();
+  // create an XML string
+  String jsonString = '''
+<weatherInfo>
+    <weather>sunny</weather>
+    <clouds>no</clouds>
+    <time>11.30</time>
+    <sportsYouCanDo>
+        <sport1>running</sport1>
+        <sport2>hiking</sport2>
+        <sport3>biking</sport3>
+    </sportsYouCanDo>
+    <anyMap>
+        <key1>value 1</key1>
+        <key2>value 2</key2>
+    </anyMap>
+</weatherInfo>
+''';
 
-  // Convert XML string to JSON file
-  await converter.convertXmlToJsonFile(xmlString, 'user_data');
+  // convert XML to JSON and save it to a file
+  await xmlConverter.convertXmlToJsonFile(jsonString, 'users');
 
-  // Convert XML string to Dart class file
-  await converter.convertXmlToDartClass(xmlString, 'User', 'user_class');
-
-// the output like this :
-// JSON file generated at: lib/generated/user_data.json
-// Dart class generated at: lib/generated/user_class.dart
-
-  /*
-      class User {
-      String? name;
-      String? age;
-      User({
-        this.name,
-        this.age,
-      });
-
-      User.fromJson(Map<String, dynamic> json) {
-        name = json["name"] ?? "";
-        age = json["age"] ?? "";
-      }
-
-      Map<String, dynamic> toJson() => {
-        "name": name ?? "",
-        "age": age ?? "",
-      };
-    }
-  */
-
-  /* 
-  {
-  "name":"ahmed talal",
-  "age":"26"
-  }
-  */
+  // convert JSON to Dart class and save it to a file
+   xmlConverter.convertXmlToDartClass(jsonString, 'Users', 'users');
 }

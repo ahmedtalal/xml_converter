@@ -1,6 +1,6 @@
 # XML Converter
 
-The XML Converter is a Dart package that provides functionality to convert XML strings to JSON format and Dart classes. This package is designed to facilitate the handling of XML data in Dart applications by offering a simple and efficient way to transform XML into usable formats.
+The XML Converter is a Dart package that provides functionality to convert XML strings to JSON format and Dart classes and saves it in the specified project structure., This package is designed to facilitate the handling of XML data in Dart applications by offering a simple and efficient way to transform XML into usable formats.
 
 ## Features
 
@@ -12,5 +12,5 @@ The XML Converter is a Dart package that provides functionality to convert XML s
 To use the XML Converter in your Dart project, add the following dependency to your `pubspec.yaml` file:
 
 ```yaml
-dependencies:
-  xml_converter:^1.0.0
+dependencies: xml_converter:^1.2.0
+```
